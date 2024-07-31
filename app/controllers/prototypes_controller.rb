@@ -44,7 +44,7 @@ class PrototypesController < ApplicationController
   def create
     @prototype = current_user.prototypes.build(prototype_params)  # current_userを使って関連付ける
     if @prototype.save
-      redirect_to @prototype, notice: 'Prototype was successfully created.'
+      redirect_to root_path
     else
       logger.debug @prototype.errors.full_messages  # エラーメッセージをログに出力
       render :new, status: :unprocessable_entity
