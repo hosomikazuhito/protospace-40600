@@ -1,8 +1,8 @@
 class PrototypesController < ApplicationController
 
-  before_action :set_prototype, only: [:show, :edit, :update, :destroy]
+  before_action :set_prototype, except: [:index, :new, :create]
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :contributor_confirmation, only: [:edit, :update, :destroy]
   
   
 
@@ -59,5 +59,12 @@ class PrototypesController < ApplicationController
    
     def prototype_params
       params.require(:prototype).permit(:title, :catch_copy, :concept, :image)
+    end
+
+    def contributor_confirmation
+      @prototype = Prototype.find(params[:id])
+      unless @prototype.user_id == current_user.id
+        redirect_to root_path, alert: "You are not authorized to perform this action."
+      end
     end
   end
